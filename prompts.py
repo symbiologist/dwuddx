@@ -7,7 +7,7 @@ Include at least 3 diagnoses in each category.
 Include a short table comparing and contrasting the items in the differential, including a column for next treatment step of each condition.
 Include a section with additional diagnostic steps that would be most helpful for distinguishing between the items on the differential. 
 Finally, summarize the single most helpful next diagnostic step, whether it be a lab test or additional information to obtain from the patient.
-
+Please be concise.
 '''
 )
 

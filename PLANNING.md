@@ -22,6 +22,9 @@ The goal of this project is to create Dash and streamlit apps that host a simple
 Create python scripts that do the following
  Web app that has a simple chat interface and imports one of multiple system prompts stored in prompts.py that is provided to the LLM. These are stored as string variables (i.e., prompt1, prompt2, etc)
  Use gemini-2.0-flash as the default model and include a dropdown menu for selecting models. 
+ The chat interface should automatically scroll as streaming output from the LLM appears, like with modern chatbot interfaces.
+ The dropdown menus for the model and the prompt should be at the top of the screen. Below this should be the chat interface, similar to modern interfaces with the chatbar at the bottom. 
+ The cursor should automatically be in the chatbox so that the user does not have to click in order to start typing.
 
 app.py should be the above using dash
 app2.py should be the above using streamlit
