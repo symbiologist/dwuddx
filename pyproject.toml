@@ -5,5 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "dash>=3.0.4",
+    "litellm>=1.69.3",
     "pandas>=2.2.3",
+    "pytest>=8.3.5",
+    "python-dotenv>=1.1.0",
+    "streamlit>=1.45.1",
 ]
