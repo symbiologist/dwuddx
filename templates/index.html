@@ -27,8 +27,9 @@
                 // Add user message to chat
                 addMessageToChat('user', userMessage);
                 
-                // Clear input
+                // Clear input and reset height
                 userInput.value = '';
+                userInput.style.height = '48px'; // Reset to min-height
                 
                 // Add temporary assistant message
                 const assistantMsgId = 'assistant-msg-' + Date.now();
@@ -79,9 +80,16 @@
             function addMessageToChat(role, content, id = null) {
                 const chatArea = document.getElementById('chat-area');
                 
+                // Remove margin-bottom from previous last message if it exists
+                const lastMessage = chatArea.lastElementChild;
+                if (lastMessage) {
+                    lastMessage.style.marginBottom = '0';
+                }
+                
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `message ${role}-message`;
                 messageDiv.style.width = "100%"; // Ensure full width
+                messageDiv.style.marginBottom = '70px'; // Add significant bottom margin to the last message
                 
                 const contentDiv = document.createElement('div');
                 contentDiv.style.width = "100%"; // Ensure content takes full width
@@ -108,30 +116,73 @@
             // Function to scroll to the bottom of the chat
             function scrollToBottom() {
                 const chatArea = document.getElementById('chat-area');
-                chatArea.scrollTop = chatArea.scrollHeight;
+                // Use setTimeout to ensure scrolling happens after DOM updates
+                setTimeout(() => {
+                    chatArea.scrollTop = chatArea.scrollHeight;
+                    
+                    // Ensure the last message is fully visible and not covered by the input area
+                    const lastMessage = chatArea.lastElementChild;
+                    if (lastMessage) {
+                        const lastMessageRect = lastMessage.getBoundingClientRect();
+                        const chatAreaRect = chatArea.getBoundingClientRect();
+                        const inputArea = document.querySelector('.input-area');
+                        const inputAreaRect = inputArea.getBoundingClientRect();
+                        
+                        // Check if the last message is partially covered by the input area
+                        if (lastMessageRect.bottom > inputAreaRect.top) {
+                            // Adjust scroll to ensure the last message is fully visible
+                            chatArea.scrollTop += (lastMessageRect.bottom - inputAreaRect.top + 20); // Add extra padding
+                        }
+                    }
+                }, 10);
             }
             
-            // Set focus to input field when page loads
+            // Function to auto-resize textarea as user types
+            function autoResizeTextarea(textarea) {
+                // Reset height to auto to get the correct scrollHeight
+                textarea.style.height = 'auto';
+                // Set the height to match the content (scrollHeight)
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+            
+            // Set focus to input field when page loads and set up auto-resize
             document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('user-input').focus();
+                const textarea = document.getElementById('user-input');
+                textarea.focus();
+                
+                // Auto-resize textarea as user types
+                textarea.addEventListener('input', function() {
+                    autoResizeTextarea(this);
+                });
+                
+                // Handle Enter key to submit form (but allow Shift+Enter for new line)
+                textarea.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault(); // Prevent new line
+                        document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+                    }
+                });
+                
+                // Initialize height
+                autoResizeTextarea(textarea);
                 
                 // No initial message
             });
         </script>
     </head>
-    <body style="width: 100%; margin: 0; padding: 0;">
-        <div class="container" style="max-width: 1200px; width: 100%;">
+    <body style="width: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
+        <div class="container" style="max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
             <header>
                 <h1>Medical AI Assistant</h1>
             </header>
             
-            <main style="width: 100%;">
-                <div id="chat-area" class="chat-area" style="width: 100%;">
+            <main style="width: 100%; flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+                <div id="chat-area" class="chat-area" style="width: 100%; flex: 1; overflow-y: auto; padding-bottom: 20px;">
                     <!-- Chat messages will be added here dynamically -->
                 </div>
             </main>
             
-            <footer class="input-area" style="max-width: 1200px; width: 100%;">
+            <footer class="input-area" style="max-width: 1100px; width: 100%; flex-shrink: 0; position: relative; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);">
                 <div class="dropdown-row">
                     <div class="dash-dropdown-container">
                         <label for="model-dropdown">Model</label>
@@ -150,12 +201,12 @@
                     </div>
                 </div>
                 
-                <form id="chat-form" onsubmit="submitMessage(event)" class="input-row">
-                    <div class="dash-input-container">
-                        <input type="text" id="user-input" placeholder="Message the AI assistant..." autocomplete="off">
+                <form id="chat-form" onsubmit="submitMessage(event)" class="input-row" style="width: 100%; gap: 30px; display: flex; align-items: flex-start;">
+                    <div class="dash-input-container" style="width: 100%; flex: 1;">
+                        <textarea id="user-input" placeholder="Enter message..." autocomplete="off" rows="1" style="width: 100%; font-size: 1em; font-family: 'Helvetica', Arial, sans-serif; border-radius: 10px; border: 2px solid #10A37F; resize: none; min-height: 24px; max-height: 120px; overflow-y: auto;"></textarea>
                     </div>
                     
-                    <button type="submit" class="send-button">Send</button>
+                    <button type="submit" class="send-button" style="align-self: flex-start; border-radius: 10px; border: none; padding: 6px 12px; font-size: 0.9em; height: 32px; min-width: 60px;">Send</button>
                 </form>
             </footer>
         </div>

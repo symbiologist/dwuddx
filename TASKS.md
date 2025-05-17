@@ -15,3 +15,8 @@ As outlined in `PLANNING.md`, implement the following:
   - Implemented a chat interface with streaming responses using Server-Sent Events (SSE)
   - Added dropdown menus for model and prompt selection
   - Ensured auto-focus on the input field works correctly
+- Fix input chatbar covering LLM output (Completed on 5/16/2025)
+  - Completely restructured the layout using flexbox to ensure proper content flow
+  - Added significant bottom margin to the last message to prevent it from being hidden
+  - Enhanced scrollToBottom function to detect and adjust for input area overlap
+  - Improved the overall layout structure for better content visibility
