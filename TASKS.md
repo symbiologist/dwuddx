@@ -20,3 +20,9 @@ As outlined in `PLANNING.md`, implement the following:
   - Added significant bottom margin to the last message to prevent it from being hidden
   - Enhanced scrollToBottom function to detect and adjust for input area overlap
   - Improved the overall layout structure for better content visibility
+- Fix duplicate icons in chat messages (Completed on 5/17/2025)
+  - Identified two sources of icons: CSS ::before pseudo-elements and JavaScript-created avatar elements
+  - Modified the CSS file to remove the ::before pseudo-elements
+  - Updated the JavaScript addMessageToChat function to remove avatar creation entirely
+  - Disabled template auto-generation in app3.py to prevent overwriting our changes
+  - Each message now displays without any icons for a cleaner interface

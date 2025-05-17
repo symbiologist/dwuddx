@@ -92,26 +92,7 @@
                 messageDiv.style.marginBottom = '70px'; // Add significant bottom margin to the last message
                 messageDiv.style.padding = '16px 24px'; // Add padding
                 
-                // Create avatar element
-                const avatarDiv = document.createElement('div');
-                avatarDiv.style.width = '32px';
-                avatarDiv.style.height = '32px';
-                avatarDiv.style.borderRadius = '50%';
-                avatarDiv.style.marginRight = '12px';
-                avatarDiv.style.flexShrink = '0';
-                avatarDiv.style.display = 'flex';
-                avatarDiv.style.alignItems = 'center';
-                avatarDiv.style.justifyContent = 'center';
-                avatarDiv.style.color = 'white';
-                avatarDiv.style.fontWeight = 'bold';
-                avatarDiv.style.fontSize = '14px';
-                
-                // Create message container with avatar and content
-                const messageContainer = document.createElement('div');
-                messageContainer.style.display = 'flex';
-                messageContainer.style.alignItems = 'flex-start';
-                messageContainer.style.width = '100%';
-                
+                // Create content div directly (no avatar)
                 const contentDiv = document.createElement('div');
                 contentDiv.style.width = "100%"; // Ensure content takes full width
                 contentDiv.style.maxWidth = "100%"; // Maximum width
@@ -122,16 +103,12 @@
                 if (role === 'user') {
                     // User message styling
                     messageDiv.style.backgroundColor = '#f8f9fa';
-                    avatarDiv.style.backgroundColor = '#4361EE';
-                    avatarDiv.textContent = 'U';
                     contentDiv.style.backgroundColor = '#f0f7ff';
                     contentDiv.style.border = '1px solid #e6f0ff';
                     contentDiv.textContent = content;
                 } else {
                     // Assistant message styling
                     messageDiv.style.backgroundColor = 'white';
-                    avatarDiv.style.backgroundColor = '#3A0CA3';
-                    avatarDiv.textContent = 'AI';
                     contentDiv.style.backgroundColor = 'white';
                     contentDiv.style.border = '1px solid #eaeaea';
                     contentDiv.innerHTML = marked.parse(content);
@@ -141,9 +118,7 @@
                     contentDiv.id = id;
                 }
                 
-                messageContainer.appendChild(avatarDiv);
-                messageContainer.appendChild(contentDiv);
-                messageDiv.appendChild(messageContainer);
+                messageDiv.appendChild(contentDiv);
                 chatArea.appendChild(messageDiv);
                 
                 scrollToBottom();
@@ -271,4 +246,3 @@
         </div>
     </body>
     </html>
-    

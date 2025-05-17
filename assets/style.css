@@ -110,38 +110,16 @@ main {
     max-width: calc(100% - 44px); /* 28px icon width + 16px margin */
 }
 
-.message::before {
-    content: '';
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    margin-right: 16px;
-    margin-top: 2px;
-    flex-shrink: 0;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-shadow: 0 2px 4px var(--shadow-color);
-}
+/* Removed ::before pseudo-elements that were causing duplicate icons */
 
 .user-message {
     background-color: var(--user-msg-bg);
     border-bottom: 1px solid var(--border-color);
 }
 
-.user-message::before {
-    background-color: #5436DA;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>');
-}
-
 .assistant-message {
     background-color: var(--assistant-msg-bg);
     border-bottom: 1px solid var(--border-color);
-}
-
-.assistant-message::before {
-    background-color: var(--primary-color);
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2V9h-2V7h4v10z"/></svg>');
 }
 
 /* Loading animation for the "Generating response..." message */
@@ -370,12 +348,6 @@ footer.input-area {
 @media (max-width: 480px) {
     .message {
         padding: 16px;
-    }
-    
-    .message::before {
-        width: 24px;
-        height: 24px;
-        margin-right: 12px;
     }
 }
 
