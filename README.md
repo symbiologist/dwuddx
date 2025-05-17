@@ -49,9 +49,9 @@ ANTHROPIC_API_KEY=your_anthropic_api_key
 Start the application with:
 
 ```
-python src/app.py  # For Dash version
-python src/app2.py  # For Streamlit version
-python src/app3.py  # For FastAPI version
+python src/app_dash.py  # For Dash version
+python src/app_streamlit.py  # For Streamlit version
+python src/app.py  # For FastAPI version
 ```
 
 The applications will be available at:
@@ -92,11 +92,14 @@ The application will be available at your Render URL (e.g., https://medical-ai-a
 
 ## Project Structure
 
-- `src/app.py`: Main application file with Dash layout and callbacks
+- `src/app.py`: Main FastAPI application file
+- `src/app_dash.py`: Dash version of the application
+- `src/app_streamlit.py`: Streamlit version of the application
 - `prompts.py`: Contains system prompts for different medical scenarios
 - `assets/`: Contains CSS and JavaScript files for styling and client-side functionality
   - `style.css`: Main stylesheet for the application
-  - `streaming.js`: Client-side JavaScript for handling streaming responses
+- `templates/`: Contains HTML templates for the FastAPI application
+  - `index.html`: Main template for the FastAPI application
 
 ## Technical Details
 

@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application
-CMD ["uvicorn", "src.app3:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
