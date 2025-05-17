@@ -34,11 +34,16 @@ app.add_middleware(
 )
 
 # Set up templates and static files
-templates = Jinja2Templates(directory="templates")
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+# Use absolute paths for templates and static files
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+templates_dir = os.path.join(base_dir, "templates")
+assets_dir = os.path.join(base_dir, "assets")
+
+templates = Jinja2Templates(directory=templates_dir)
+app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
 # Create templates directory if it doesn't exist
-os.makedirs("templates", exist_ok=True)
+os.makedirs(templates_dir, exist_ok=True)
 
 # Define models
 class Message(BaseModel):
@@ -139,8 +144,12 @@ async def create_template():
                 
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `message ${role}-message`;
+                messageDiv.style.width = "100%"; // Ensure full width
                 
                 const contentDiv = document.createElement('div');
+                contentDiv.style.width = "100%"; // Ensure content takes full width
+                contentDiv.style.maxWidth = "100%"; // Maximum width
+                
                 if (role === 'user') {
                     // User messages are displayed as plain text
                     contentDiv.textContent = content;
@@ -169,27 +178,23 @@ async def create_template():
             document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('user-input').focus();
                 
-                // Add initial assistant message if chat is empty
-                const chatArea = document.getElementById('chat-area');
-                if (chatArea.children.length === 0) {
-                    addMessageToChat('assistant', "Hello! I'm your medical AI assistant. How can I help you today?");
-                }
+                // No initial message
             });
         </script>
     </head>
-    <body>
-        <div class="container">
+    <body style="width: 100%; margin: 0; padding: 0;">
+        <div class="container" style="max-width: 1200px; width: 100%;">
             <header>
                 <h1>Medical AI Assistant</h1>
             </header>
             
-            <main>
-                <div id="chat-area" class="chat-area">
+            <main style="width: 100%;">
+                <div id="chat-area" class="chat-area" style="width: 100%;">
                     <!-- Chat messages will be added here dynamically -->
                 </div>
             </main>
             
-            <footer class="input-area">
+            <footer class="input-area" style="max-width: 1200px; width: 100%;">
                 <div class="dropdown-row">
                     <div class="dash-dropdown-container">
                         <label for="model-dropdown">Model</label>
@@ -222,7 +227,8 @@ async def create_template():
     """
     
     # Write the HTML template to the templates directory
-    with open("templates/index.html", "w") as f:
+    template_file = os.path.join(templates_dir, "index.html")
+    with open(template_file, "w") as f:
         f.write(html_content)
 
 # Define routes

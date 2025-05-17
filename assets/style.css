@@ -35,7 +35,7 @@ body {
 
 .container {
     flex-grow: 1;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0;
     display: flex;
@@ -44,6 +44,7 @@ body {
     position: relative;
     background-color: var(--light-bg);
     box-shadow: 0 0 20px var(--shadow-color);
+    width: 100%;
 }
 
 /* Header styling */
@@ -87,7 +88,7 @@ main {
 }
 
 .message {
-    padding: 24px 48px;
+    padding: 24px 24px;
     width: 100%;
     box-sizing: border-box;
     word-wrap: break-word;
@@ -95,6 +96,13 @@ main {
     display: flex;
     align-items: flex-start;
     position: relative;
+}
+
+/* Message content styling */
+.message > div {
+    flex-grow: 1;
+    min-width: 0; /* Allows the content to shrink below its minimum content size */
+    max-width: calc(100% - 44px); /* 28px icon width + 16px margin */
 }
 
 .message::before {
@@ -159,7 +167,7 @@ footer.input-area {
     right: 0;
     z-index: 100;
     border-top: 1px solid var(--border-color);
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
 }
