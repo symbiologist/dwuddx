@@ -257,6 +257,30 @@
                 textarea.style.height = textarea.scrollHeight + 'px';
             }
             
+            // Function to handle prompt button clicks
+            function handlePromptButtonClick(event) {
+                // Get all prompt buttons
+                const promptButtons = document.querySelectorAll('.prompt-button');
+                
+                // Remove active class from all buttons
+                promptButtons.forEach(button => {
+                    button.classList.remove('prompt-button-active');
+                    button.style.backgroundColor = '#f9f9f9';
+                    button.style.color = '#333';
+                    button.style.border = '1px solid #ddd';
+                });
+                
+                // Add active class to clicked button
+                event.target.classList.add('prompt-button-active');
+                event.target.style.backgroundColor = '#4361EE';
+                event.target.style.color = 'white';
+                event.target.style.border = '1px solid #4361EE';
+                
+                // Update hidden input value
+                const promptValue = event.target.getAttribute('data-value');
+                document.getElementById('prompt-dropdown').value = promptValue;
+            }
+            
             // Set focus to input field when page loads and set up auto-resize
             document.addEventListener('DOMContentLoaded', function() {
                 const textarea = document.getElementById('user-input');
@@ -278,6 +302,11 @@
                 // Add click event listener to the send button
                 document.querySelector('.send-button').addEventListener('click', function(event) {
                     submitMessage(event); // Call submitMessage directly
+                });
+                
+                // Add click event listeners to prompt buttons
+                document.querySelectorAll('.prompt-button').forEach(button => {
+                    button.addEventListener('click', handlePromptButtonClick);
                 });
                 
                 // Initialize height
@@ -310,12 +339,14 @@
                         </select>
                     </div>
                     
-                    <div class="dash-dropdown-container" style="flex: 1;">
-                        <label for="prompt-dropdown" style="display: block; margin-bottom: 6px; font-size: 0.8em; color: #666; font-weight: 500;">System Prompt</label>
-                        <select id="prompt-dropdown" class="dropdown" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background-color: #f9f9f9; font-size: 0.9em; color: #333; appearance: none; background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; transition: all 0.2s ease;">
-                            <option value="prompt1">Differential Diagnosis</option>
-                            <option value="prompt2">Medical Information</option>
-                        </select>
+                    <div class="prompt-buttons-container" style="flex: 1;">
+                        <label style="display: block; margin-bottom: 6px; font-size: 0.8em; color: #666; font-weight: 500;">System Prompt</label>
+                        <div class="prompt-buttons" style="display: flex; gap: 8px;">
+                            <button id="prompt-button-1" class="prompt-button prompt-button-active" data-value="prompt1" style="flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #4361EE; background-color: #4361EE; color: white; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; font-weight: 500;">Differential Diagnosis</button>
+                            <button id="prompt-button-2" class="prompt-button" data-value="prompt2" style="flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background-color: #f9f9f9; color: #333; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease;">Medical Information</button>
+                        </div>
+                        <!-- Hidden input to store the selected prompt value -->
+                        <input type="hidden" id="prompt-dropdown" value="prompt1">
                     </div>
                 </div>
                 
@@ -343,6 +374,23 @@
                                 border-color: #4361EE;
                                 box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
                                 outline: none;
+                            }
+                            .prompt-button {
+                                transition: all 0.2s ease;
+                                font-weight: 500;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                            }
+                            .prompt-button:hover {
+                                transform: translateY(-1px);
+                                box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+                            }
+                            .prompt-button:active {
+                                transform: translateY(0);
+                                box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                            }
+                            .prompt-button-active {
+                                font-weight: 600;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.15);
                             }
                         </style>
                     </div>

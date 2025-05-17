@@ -16,6 +16,11 @@ As outlined in `PLANNING.md`, implement the following:
   - Renamed app2.py to app_streamlit.py (Streamlit version)
   - Renamed app3.py to app.py (FastAPI version)
   - Updated Dockerfile and documentation to reflect new file names
+- ✅ Replace system prompt dropdown with buttons (Completed on 5/17/2025)
+  - Converted dropdown select to clickable buttons
+  - Added JavaScript to handle button clicks and update the active button styling
+  - Used a hidden input field to store the selected prompt value
+  - Enhanced button styling with hover and active states
 
 ## Completed Tasks
 - Set up Docker and Render deployment for FastAPI app (Completed on 5/17/2025)
