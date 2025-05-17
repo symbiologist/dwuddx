@@ -153,16 +153,50 @@ async def create_template():
                 messageDiv.className = `message ${role}-message`;
                 messageDiv.style.width = "100%"; // Ensure full width
                 messageDiv.style.marginBottom = '70px'; // Add significant bottom margin to the last message
+                messageDiv.style.padding = '16px 24px'; // Add padding
+                
+                // Create avatar element
+                const avatarDiv = document.createElement('div');
+                avatarDiv.style.width = '32px';
+                avatarDiv.style.height = '32px';
+                avatarDiv.style.borderRadius = '50%';
+                avatarDiv.style.marginRight = '12px';
+                avatarDiv.style.flexShrink = '0';
+                avatarDiv.style.display = 'flex';
+                avatarDiv.style.alignItems = 'center';
+                avatarDiv.style.justifyContent = 'center';
+                avatarDiv.style.color = 'white';
+                avatarDiv.style.fontWeight = 'bold';
+                avatarDiv.style.fontSize = '14px';
+                
+                // Create message container with avatar and content
+                const messageContainer = document.createElement('div');
+                messageContainer.style.display = 'flex';
+                messageContainer.style.alignItems = 'flex-start';
+                messageContainer.style.width = '100%';
                 
                 const contentDiv = document.createElement('div');
                 contentDiv.style.width = "100%"; // Ensure content takes full width
                 contentDiv.style.maxWidth = "100%"; // Maximum width
+                contentDiv.style.borderRadius = '12px';
+                contentDiv.style.padding = '12px 16px';
+                contentDiv.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
                 
                 if (role === 'user') {
-                    // User messages are displayed as plain text
+                    // User message styling
+                    messageDiv.style.backgroundColor = '#f8f9fa';
+                    avatarDiv.style.backgroundColor = '#4361EE';
+                    avatarDiv.textContent = 'U';
+                    contentDiv.style.backgroundColor = '#f0f7ff';
+                    contentDiv.style.border = '1px solid #e6f0ff';
                     contentDiv.textContent = content;
                 } else {
-                    // Assistant messages are rendered as markdown
+                    // Assistant message styling
+                    messageDiv.style.backgroundColor = 'white';
+                    avatarDiv.style.backgroundColor = '#3A0CA3';
+                    avatarDiv.textContent = 'AI';
+                    contentDiv.style.backgroundColor = 'white';
+                    contentDiv.style.border = '1px solid #eaeaea';
                     contentDiv.innerHTML = marked.parse(content);
                 }
                 
@@ -170,7 +204,9 @@ async def create_template():
                     contentDiv.id = id;
                 }
                 
-                messageDiv.appendChild(contentDiv);
+                messageContainer.appendChild(avatarDiv);
+                messageContainer.appendChild(contentDiv);
+                messageDiv.appendChild(messageContainer);
                 chatArea.appendChild(messageDiv);
                 
                 scrollToBottom();
@@ -229,14 +265,15 @@ async def create_template():
                 // Initialize height
                 autoResizeTextarea(textarea);
                 
-                // No initial message
+                // Add welcome message
+                addMessageToChat('assistant', 'Hello! I am your medical AI assistant. How can I help you today?');
             });
         </script>
     </head>
-    <body style="width: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
-        <div class="container" style="max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
-            <header>
-                <h1>Medical AI Assistant</h1>
+    <body style="width: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color: #1A1A2E; background-color: #f8f9fa;">
+        <div class="container" style="max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05);">
+            <header style="padding: 16px 0; border-bottom: 1px solid #eaeaea; background: linear-gradient(to right, #4361EE, #3A0CA3); color: white;">
+                <h1 style="text-align: center; margin: 0; font-size: 1.5em; font-weight: 600; letter-spacing: -0.5px;">Medical AI Assistant</h1>
             </header>
             
             <main style="width: 100%; flex: 1; overflow: hidden; display: flex; flex-direction: column;">
@@ -245,31 +282,53 @@ async def create_template():
                 </div>
             </main>
             
-            <footer class="input-area" style="max-width: 1100px; width: 100%; flex-shrink: 0; position: relative; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);">
-                <div class="dropdown-row">
-                    <div class="dash-dropdown-container">
-                        <label for="model-dropdown">Model</label>
-                        <select id="model-dropdown" class="dropdown">
+            <footer class="input-area" style="max-width: 1100px; width: 100%; flex-shrink: 0; position: relative; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); background-color: white; padding: 16px 24px; border-top: 1px solid #eaeaea;">
+                <div class="dropdown-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
+                    <div class="dash-dropdown-container" style="flex: 1;">
+                        <label for="model-dropdown" style="display: block; margin-bottom: 6px; font-size: 0.8em; color: #666; font-weight: 500;">Model</label>
+                        <select id="model-dropdown" class="dropdown" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background-color: #f9f9f9; font-size: 0.9em; color: #333; appearance: none; background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; transition: all 0.2s ease;">
                             <option value="gemini/gemini-2.0-flash">Gemini 2.0 Flash</option>
                             <option value="claude-3-opus-20240229">Claude 3 Opus</option>
                         </select>
                     </div>
                     
-                    <div class="dash-dropdown-container">
-                        <label for="prompt-dropdown">System Prompt</label>
-                        <select id="prompt-dropdown" class="dropdown">
+                    <div class="dash-dropdown-container" style="flex: 1;">
+                        <label for="prompt-dropdown" style="display: block; margin-bottom: 6px; font-size: 0.8em; color: #666; font-weight: 500;">System Prompt</label>
+                        <select id="prompt-dropdown" class="dropdown" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background-color: #f9f9f9; font-size: 0.9em; color: #333; appearance: none; background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; transition: all 0.2s ease;">
                             <option value="prompt1">Differential Diagnosis</option>
                             <option value="prompt2">Medical Information</option>
                         </select>
                     </div>
                 </div>
                 
-                <form id="chat-form" onsubmit="submitMessage(event)" class="input-row" style="width: 100%; gap: 30px; display: flex; align-items: flex-start;">
-                    <div class="dash-input-container" style="width: 100%; flex: 1;">
-                        <textarea id="user-input" placeholder="Enter message..." autocomplete="off" rows="1" style="width: 100%; font-size: 1em; font-family: 'Helvetica', Arial, sans-serif; border-radius: 10px; border: 2px solid #10A37F; resize: none; min-height: 24px; max-height: 120px; overflow-y: auto;"></textarea>
+                <form id="chat-form" onsubmit="submitMessage(event)" class="input-row" style="width: 100%; gap: 16px; display: flex; align-items: flex-start;">
+                    <div class="dash-input-container" style="width: 100%; flex: 1; position: relative;">
+                        <textarea id="user-input" placeholder="Enter message..." autocomplete="off" rows="1" style="width: 100%; font-size: 1em; font-family: inherit; border-radius: 12px; border: 1px solid #ddd; padding: 12px 16px; resize: none; min-height: 24px; max-height: 120px; overflow-y: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: border-color 0.2s ease, box-shadow 0.2s ease; outline: none;"></textarea>
+                        <style>
+                            #user-input:focus {
+                                border-color: #4361EE;
+                                box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+                            }
+                            .send-button:hover {
+                                transform: translateY(-1px);
+                                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+                            }
+                            .send-button:active {
+                                transform: translateY(0);
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                            }
+                            select.dropdown:hover {
+                                border-color: #4361EE;
+                            }
+                            select.dropdown:focus {
+                                border-color: #4361EE;
+                                box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+                                outline: none;
+                            }
+                        </style>
                     </div>
                     
-                    <button type="submit" class="send-button" style="align-self: flex-start; border-radius: 10px; border: none; padding: 6px 12px; font-size: 0.9em; height: 32px; min-width: 60px;">Send</button>
+                    <button type="submit" class="send-button" style="align-self: flex-start; border-radius: 12px; border: none; padding: 10px 16px; font-size: 0.9em; font-weight: 500; height: 40px; min-width: 80px; background: linear-gradient(to right, #4361EE, #3A0CA3); color: white; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Send</button>
                 </form>
             </footer>
         </div>
