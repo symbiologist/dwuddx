@@ -1,0 +1,164 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Medical AI Assistant</title>
+        <link rel="stylesheet" href="/assets/style.css">
+        <!-- Add Marked.js for Markdown rendering -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+            // Function to handle form submission
+            async function submitMessage(event) {
+                event.preventDefault();
+                
+                const userInput = document.getElementById('user-input');
+                const userMessage = userInput.value.trim();
+                
+                if (!userMessage) return;
+                
+                // Get selected model and prompt
+                const modelSelect = document.getElementById('model-dropdown');
+                const promptSelect = document.getElementById('prompt-dropdown');
+                const modelName = modelSelect.value;
+                const promptName = promptSelect.value;
+                
+                // Add user message to chat
+                addMessageToChat('user', userMessage);
+                
+                // Clear input
+                userInput.value = '';
+                
+                // Add temporary assistant message
+                const assistantMsgId = 'assistant-msg-' + Date.now();
+                addMessageToChat('assistant', 'Generating response...', assistantMsgId);
+                
+                // Start SSE connection for streaming response
+                const eventSource = new EventSource(`/stream?user_message=${encodeURIComponent(userMessage)}&model_name=${encodeURIComponent(modelName)}&prompt_name=${encodeURIComponent(promptName)}`);
+                
+                let responseContent = '';
+                
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.content) {
+                        responseContent = data.content;
+                        
+                        // Update the assistant message with the current content
+                        const assistantMsg = document.getElementById(assistantMsgId);
+                        if (assistantMsg) {
+                            // Render markdown content
+                            assistantMsg.innerHTML = marked.parse(responseContent);
+                        }
+                        
+                        // Scroll to bottom
+                        scrollToBottom();
+                    }
+                    
+                    if (data.status === 'complete') {
+                        eventSource.close();
+                    }
+                };
+                
+                eventSource.onerror = function(error) {
+                    console.error('SSE Error:', error);
+                    eventSource.close();
+                    
+                    // Update with error message if no content received
+                    if (!responseContent) {
+                        const assistantMsg = document.getElementById(assistantMsgId);
+                        if (assistantMsg) {
+                            assistantMsg.innerHTML = "Error: Failed to generate response. Please try again.";
+                        }
+                    }
+                };
+            }
+            
+            // Function to add a message to the chat
+            function addMessageToChat(role, content, id = null) {
+                const chatArea = document.getElementById('chat-area');
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${role}-message`;
+                
+                const contentDiv = document.createElement('div');
+                if (role === 'user') {
+                    // User messages are displayed as plain text
+                    contentDiv.textContent = content;
+                } else {
+                    // Assistant messages are rendered as markdown
+                    contentDiv.innerHTML = marked.parse(content);
+                }
+                
+                if (id) {
+                    contentDiv.id = id;
+                }
+                
+                messageDiv.appendChild(contentDiv);
+                chatArea.appendChild(messageDiv);
+                
+                scrollToBottom();
+            }
+            
+            // Function to scroll to the bottom of the chat
+            function scrollToBottom() {
+                const chatArea = document.getElementById('chat-area');
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+            
+            // Set focus to input field when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('user-input').focus();
+                
+                // Add initial assistant message if chat is empty
+                const chatArea = document.getElementById('chat-area');
+                if (chatArea.children.length === 0) {
+                    addMessageToChat('assistant', "Hello! I'm your medical AI assistant. How can I help you today?");
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Medical AI Assistant</h1>
+            </header>
+            
+            <main>
+                <div id="chat-area" class="chat-area">
+                    <!-- Chat messages will be added here dynamically -->
+                </div>
+            </main>
+            
+            <footer class="input-area">
+                <div class="dropdown-row">
+                    <div class="dash-dropdown-container">
+                        <label for="model-dropdown">Model</label>
+                        <select id="model-dropdown" class="dropdown">
+                            <option value="gemini/gemini-2.0-flash">Gemini 2.0 Flash</option>
+                            <option value="claude-3-opus-20240229">Claude 3 Opus</option>
+                        </select>
+                    </div>
+                    
+                    <div class="dash-dropdown-container">
+                        <label for="prompt-dropdown">System Prompt</label>
+                        <select id="prompt-dropdown" class="dropdown">
+                            <option value="prompt1">Differential Diagnosis</option>
+                            <option value="prompt2">Medical Information</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <form id="chat-form" onsubmit="submitMessage(event)" class="input-row">
+                    <div class="dash-input-container">
+                        <input type="text" id="user-input" placeholder="Message the AI assistant..." autocomplete="off">
+                    </div>
+                    
+                    <button type="submit" class="send-button">Send</button>
+                </form>
+            </footer>
+        </div>
+    </body>
+    </html>
+    
