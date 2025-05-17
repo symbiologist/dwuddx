@@ -16,8 +16,11 @@ A Dash-based web application that provides a chat interface for interacting with
 
 - Python 3.8+
 - API keys for supported models (Gemini, Claude)
+- Docker (optional, for containerized deployment)
 
 ### Installation
+
+#### Local Development
 
 1. Clone the repository
 2. Create a virtual environment:
@@ -41,13 +44,41 @@ ANTHROPIC_API_KEY=your_anthropic_api_key
 
 ### Running the Application
 
+#### Local Development
+
 Start the application with:
 
 ```
-python src/app.py
+python src/app.py  # For Dash version
+python src/app2.py  # For Streamlit version
+python src/app3.py  # For FastAPI version
 ```
 
-The application will be available at http://localhost:8054
+The applications will be available at:
+- Dash: http://localhost:8054
+- Streamlit: http://localhost:8501
+- FastAPI: http://localhost:8000
+
+#### Using Docker
+
+1. Build and run the Docker container:
+   ```
+   docker-compose up --build
+   ```
+
+2. The application will be available at http://localhost:8000
+
+### Deployment on Render
+
+This application can be easily deployed on Render using the included `render.yaml` configuration:
+
+1. Push your code to a Git repository (GitHub, GitLab, etc.)
+2. Create a new Web Service on Render and connect your repository
+3. Select "Use render.yaml from repository"
+4. Add your API keys as environment variables in the Render dashboard
+5. Deploy the service
+
+The application will be available at your Render URL (e.g., https://medical-ai-assistant.onrender.com)
 
 ## Usage
 

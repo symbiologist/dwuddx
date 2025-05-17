@@ -1,0 +1,18 @@
+services:
+  # A Docker web service
+  - type: web
+    name: medical-ai-assistant
+    env: docker
+    region: oregon # Choose the region closest to your users
+    plan: free # Adjust based on your needs
+    branch: main # Adjust based on your repository branch
+    numInstances: 1
+    healthCheckPath: /
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false # This means you'll need to set this value in the Render dashboard
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PORT
+        value: 8000
+    autoDeploy: true

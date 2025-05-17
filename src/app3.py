@@ -214,4 +214,5 @@ async def stream_response(
 
 # Run the app
 if __name__ == "__main__":
-    uvicorn.run("app3:app", host="0.0.0.0", port=8057, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app3:app", host="0.0.0.0", port=port, reload=True)
