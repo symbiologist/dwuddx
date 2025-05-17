@@ -110,8 +110,6 @@ main {
     max-width: calc(100% - 44px); /* 28px icon width + 16px margin */
 }
 
-/* Removed ::before pseudo-elements that were causing duplicate icons */
-
 .user-message {
     background-color: var(--user-msg-bg);
     border-bottom: 1px solid var(--border-color);

@@ -5,9 +5,17 @@ As outlined in `PLANNING.md`, implement the following:
 - Create a working app.py script
 
 ## Discovered During Work
-(None yet)
+- Fix Firefox compatibility issue with SSE in app3.py (Added on 5/17/2025)
+  - Implemented a hybrid approach with browser detection
+  - Used non-streaming POST endpoint (/chat) for Firefox
+  - Re-enabled streaming with SSE for Chrome and other browsers
+  - Replaced form element with div to avoid form submission issues in Firefox
+  - Updated event handlers to work with the new non-form approach
 
 ## Completed Tasks
+- Add simple icons to chat messages in app3.py (Completed on 5/17/2025)
+  - Added avatar elements with "U" for user and "A" for assistant
+  - Implemented using JavaScript in the addMessageToChat function
 - Create a working app2.py script using Streamlit (Completed on 5/16/2025)
 - Investigate auto-selection of chatbar input on page load in app2.py (Completed on 5/16/2025)
   - Note: After multiple approaches, it was determined that auto-focus is not supported in Streamlit. Added clear instructions for users to click in the input field instead.
