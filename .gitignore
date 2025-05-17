@@ -181,3 +181,13 @@ template.Rproj
 
 # Large data files; UNCOMMENT below
 # data
+
+# VSCode settings
+.vscode/
+**/globalStorage/
+**/settings/cline_mcp_settings.json
+
+# API tokens and secrets
+**/*_token*
+**/*_key*
+**/*.pem
